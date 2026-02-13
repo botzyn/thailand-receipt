@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thailand-Style Receipt</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@400;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: #1a1a2e;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      font-family: 'Kanit', sans-serif;
+    }
+    
+    .receipt {
+      width: 100%;
+      max-width: 380px;
+      background: linear-gradient(145deg, #fffbf2 0%, #fff5e6 100%);
+      border-radius: 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 
+        0 0 0 4px #ff6b6b,
+        0 0 0 8px #ffd93d,
+        0 20px 60px rgba(0,0,0,0.4);
+    }
+    
+    /* Thai decorative top border */
+    .receipt::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 12px;
+      background: 
+        repeating-linear-gradient(
+          90deg,
+          #ff6b6b 0px,
+          #ff6b6b 20px,
+          #ffd93d 20px,
+          #ffd93d 40px,
+          #4ecdc4 40px,
+          #4ecdc4 60px,
+          #ff6b6b 60px,
+          #ff6b6b 80px
+        );
+    }
+    
+    /* Thai decorative bottom border */
+    .receipt::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 12px;
+      background: 
+        repeating-linear-gradient(
+          90deg,
+          #ff6b6b 0px,
+          #ff6b6b 20px,
+          #ffd93d 20px,
+          #ffd93d 40px,
+          #4ecdc4 40px,
+          #4ecdc4 60px,
+          #ff6b6b 60px,
+          #ff6b6b 80px
+        );
+    }
+    
+    .receipt-content {
+      padding: 30px 25px;
+    }
+    
+    /* Header section */
+    .receipt-header {
+      text-align: center;
+      margin-bottom: 25px;
+      position: relative;
+    }
+    
+    .logo-icon {
+      font-size: 48px;
+      margin-bottom: 8px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    .brand-name {
+      font-family: 'Itim', cursive;
+      font-size: 32px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff6b6b, #ffa502);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 2px;
+    }
+    
+    .tagline {
+      font-size: 12px;
+      color: #4ecdc4;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-top: 4px;
+    }
+    
+    /* Decorative lotus divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+      position: relative;
+    }
+    
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #ffd93d, transparent);
+    }
+    
+    .divider-icon {
+      font-size: 24px;
+      margin: 0 15px;
+    }
+    
+    /* Store info */
+    .store-info {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+    }
+    
+    .store-info strong {
+      color: #333;
+    }
+    
+    /* Receipt info */
+    .receipt-meta {
+      display: flex;
+      justify-content: space-between;
+      background: #fff;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 2px solid #f0e6d3;
+      font-size: 12px;
+    }
+    
+    .receipt-meta div {
+      text-align: center;
+    }
+    
+    .receipt-meta label {
+      display: block;
+      color: #999;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+    }
+    
+    .receipt-meta span {
+      color: #333;
+      font-weight: 600;
+    }
+    
+    /* Items section */
+    .items-header {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 10px;
+      border-bottom: 2px dashed #e0d5c5;
+      margin-bottom: 10px;
+      font-weight: 700;
+      color: #ff6b6b;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .items-header .qty-col { width: 50px; }
+    .items-header .item-col { flex: 1; }
+    .items-header .price-col { width: 70px; text-align: right; }
+    
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px dotted #e8e0d5;
+    }
+    
+    .item:last-child {
+      border-bottom: none;
+    }
+    
+    .item .qty-col {
+      width: 50px;
+      color: #4ecdc4;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .item .item-col {
+      flex: 1;
+      padding: 0 10px;
+    }
+    
+    .item-name {
+      color: #333;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .item-options {
+      color: #888;
+      font-size: 11px;
+      font-style: italic;
+      margin-top: 2px;
+    }
+    
+    .item .price-col {
+      width: 70px;
+      text-align: right;
+      color: #333;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    /* Totals section */
+    .totals {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 2px solid #ffd93d;
+    }
+    
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 14px;
+    }
+    
+    .total-row.subtotal {
+      color: #666;
+    }
+    
+    .total-row.tax {
+      color: #666;
+      font-size: 13px;
+    }
+    
+    .total-row.grand-total {
+      margin-top: 10px;
+      padding-top: 15px;
+      border-top: 3px double #ff6b6b;
+      font-size: 22px;
+      font-weight: 700;
+    }
+    
+    .total-row.grand-total .label {
+      background: linear-gradient(135deg, #ff6b6b, #ffa502);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .total-row.grand-total .amount {
+      background: linear-gradient(135deg, #ff6b6b, #ffa502);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .total-row .amount {
+      font-weight: 600;
+    }
+    
+    /* Payment method */
+    .payment-method {
+      margin-top: 20px;
+      background: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      border: 2px solid #4ecdc4;
+    }
+    
+    .payment-method-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #4ecdc4;
+      margin-bottom: 4px;
+    }
+    
+    .payment-method-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #333;
+    }
+    
+    /* Footer */
+    .receipt-footer {
+      text-align: center;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px dashed #e0d5c5;
+    }
+    
+    .thank-you {
+      font-family: 'Itim', cursive;
+      font-size: 24px;
+      color: #ff6b6b;
+      margin-bottom: 8px;
+    }
+    
+    .footer-text {
+      font-size: 11px;
+      color: #999;
+      line-height: 1.6;
+    }
+    
+    .social-icons {
+      margin-top: 15px;
+      font-size: 20px;
+      letter-spacing: 8px;
+    }
+    
+    /* Print styles */
+    @media print {
+      body {
+        background: none;
+        padding: 0;
+      }
+      .receipt {
+        box-shadow: none;
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="receipt">
+    <div class="receipt-content">
+      <!-- Header -->
+      <div class="receipt-header">
+        <div class="logo-icon">🐘</div>
+        <div class="brand-name">SAWASDEE</div>
+        <div class="tagline">Thai Street Eats</div>
+      </div>
+      
+      <!-- Divider -->
+      <div class="divider">
+        <span class="divider-icon">🪷</span>
+      </div>
+      
+      <!-- Store Info -->
+      <div class="store-info">
+        <strong>Night Market Branch</strong><br>
+        123 Sukhumvit Soi 11, Bangkok<br>
+        Open Daily: 10:00 - 23:00
+      </div>
+      
+      <!-- Receipt Meta -->
+      <div class="receipt-meta">
+        <div>
+          <label>Order #</label>
+          <span>TH-8847</span>
+        </div>
+        <div>
+          <label>Date</label>
+          <span>12/02/26</span>
+        </div>
+        <div>
+          <label>Time</label>
+          <span>14:32</span>
+        </div>
+      </div>
+      
+      <!-- Items Header -->
+      <div class="items-header">
+        <span class="qty-col">Qty</span>
+        <span class="item-col">Item</span>
+        <span class="price-col">Price</span>
+      </div>
+      
+      <!-- Items -->
+      <div class="item">
+        <span class="qty-col">2x</span>
+        <div class="item-col">
+          <div class="item-name">Pad Thai Classic</div>
+          <div class="item-options">No peanuts, extra sprouts</div>
+        </div>
+        <span class="price-col">฿280</span>
+      </div>
+      
+      <div class="item">
+        <span class="qty-col">1x</span>
+        <div class="item-col">
+          <div class="item-name">Green Curry</div>
+          <div class="item-options">Extra spicy, chicken</div>
+        </div>
+        <span class="price-col">฿150</span>
+      </div>
+      
+      <div class="item">
+        <span class="qty-col">1x</span>
+        <div class="item-col">
+          <div class="item-name">Mango Sticky Rice</div>
+          <div class="item-options">Sweet coconut</div>
+        </div>
+        <span class="price-col">฿120</span>
+      </div>
+      
+      <div class="item">
+        <span class="qty-col">2x</span>
+        <div class="item-col">
+          <div class="item-name">Thai Iced Tea</div>
+          <div class="item-options">Less ice</div>
+        </div>
+        <span class="price-col">฿100</span>
+      </div>
+      
+      <!-- Totals -->
+      <div class="totals">
+        <div class="total-row subtotal">
+          <span class="label">Subtotal</span>
+          <span class="amount">฿650</span>
+        </div>
+        <div class="total-row tax">
+          <span class="label">VAT (7%)</span>
+          <span class="amount">฿45.50</span>
+        </div>
+        <div class="total-row tax">
+          <span class="label">Service</span>
+          <span class="amount">฿32.50</span>
+        </div>
+        <div class="total-row grand-total">
+          <span class="label">TOTAL</span>
+          <span class="amount">฿728</span>
+        </div>
+      </div>
+      
+      <!-- Payment -->
+      <div class="payment-method">
+        <div class="payment-method-label">Paid Via</div>
+        <div class="payment-method-value">💳 QR Payment</div>
+      </div>
+      
+      <!-- Footer -->
+      <div class="receipt-footer">
+        <div class="thank-you">ขอบคุณค่ะ!</div>
+        <div class="footer-text">
+          Thank you for dining with us!<br>
+          Come back tomorrow for 10% off your next order
+        </div>
+        <div class="social-icons">
+          📸 📱
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
